@@ -9,12 +9,16 @@ Okay, I've created a simple 21 game using HTML, CSS, and Javascript.
     <title>Simple 21 Game</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <style>
+        :root{
+            --text-6xl--line-height: calc(4 / 3.75);
+        }
         .card {
             border: 1px solid #ddd;
             padding: 10px;
             border-radius: 5px;
             background-color: #f9f9f9;
             min-width: 50px;
+            min-height: 60px;
             text-align: center;
             box-sizing: border-box;
         }
@@ -32,46 +36,54 @@ Okay, I've created a simple 21 game using HTML, CSS, and Javascript.
             Simple 21
         </h1>
         <div class="w-sm md:w-md p-4 rounded-2xl shadow-xl border-2 border-blue-200 text-center">
-            <div id="dealer-cards" class="flex justify-center gap-2 mb-4"></div>
-            <p id="dealer-total" class="mb-4 font-semibold">Dealer Total: 0</p>
-            <div id="player-cards" class="flex justify-center gap-2 mb-4"></div>
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="font-semibold">How to Play Simple 21</h3>
+                <button id="new-game" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">New Game</button>
+            </div>
+            <div id="dealer-cards" class="flex justify-center gap-2 mb-2"></div>
+            <p id="dealer-total" class="mb-8 font-semibold">Dealer Total: 0</p>
+            <div id="player-cards" class="flex justify-center gap-2 mb-2"></div>
             <p id="player-total" class="mb-4 font-semibold">Your Total: 0</p>
-            <div id="message" class="mb-4 font-medium"></div>
-            <div id="controls" class="flex justify-center gap-4">
+            <div class="mb-4 font-medium text-gray-600 text-[14px]">Press Hit (+) to draw or Keep (K) to stand.</div>
+            <div class="flex justify-center gap-4">
+                <div id="message" class="w-fit p-2 mb-2 rounded-md border border-transparent bg-white/50 font-bold text-gray-600 text-[16px]"></div>
                 <button id="hit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Hit (+)</button>
                 <button id="keep" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Keep (K)</button>
-                <button id="new-game" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">New Game</button>
             </div>
         </div>
         <div class="w-sm md:w-md p-4 rounded-2xl shadow-xl border-2 border-blue-200 text-center">
-            <div class="py-5">
+            <div>
                 <details class="group">
                     <summary class="flex cursor-pointer list-none items-center justify-between font-medium">
-                        <span>How to Play Simple 21</span>
+                        <span class="text-[14px]">How to Play Simple 21</span>
                         <span class="transition group-open:rotate-180">
                                 <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24">
                                     <path d="M6 9l6 6 6-6"></path>
                                 </svg>
                             </span>
                     </summary>
-                    <ol class="text-left pt-4">
-                        <li><strong>Objective:</strong> Get as close to 21 without going over.</li>
-                        <li><strong>Controls:</strong>
-                            <ul>
-                                <li><strong>Hit (+):</strong> Draw another card.</li>
-                                <li><strong>Keep (K):</strong> Stop drawing cards.</li>
+                    <ol class="text-left pt-4 text-[16px] font-normal">
+                        <li class="w-100% p-2 mb-2 rounded-xl border border-transparent bg-white/50">
+                            <strong class="text-[16px]">Objective</strong>
+                            <p class="mt-2">Get as close to 21 without going over.</p>
+                        </li>
+                        <li class="w-100% p-2 mb-2 rounded-xl border border-transparent bg-white/50">
+                            <strong class="text-[16px]">Controls</strong>
+                            <p class="mb-2 mt-2"><strong class="text-[16px]">Hit (+):</strong> Draw another card.</p>
+                            <p class="mb-2"><strong class="text-[16px]">Keep (K):</strong> Stop drawing cards.</p>
+                        </li>
+                        <li class="w-100% p-2 mb-2 rounded-xl border border-transparent bg-white/50">
+                            <strong class="text-[16px]">Dealer's Play</strong>
+                            <ul class="list-disc list-inside mt-2">
+                                <li class="mb-2">Dealer's first card is face up, the rest are hidden.</li>
+                                <li class="mb-2">Dealer draws until total is 17 or higher.</li>
                             </ul>
                         </li>
-                        <li><strong>Dealer's Play:</strong>
-                            <ul>
-                                <li>Dealer's first card is face up, the rest are hidden.</li>
-                                <li>Dealer draws until total is 17 or higher.</li>
-                            </ul>
-                        </li>
-                        <li><strong>Winning:</strong>
-                            <ul>
-                                <li>Your total is higher than the dealer's.</li>
-                                <li>Dealer's total exceeds 21.</li>
+                        <li class="w-100% p-2 mb-2 rounded-xl border border-transparent bg-white/50">
+                            <strong class="text-[16px]">Winning</strong>
+                            <ul class="list-disc list-inside mt-2">
+                                <li class="mb-2">Your total is higher than the dealer's.</li>
+                                <li class="mb-2">Dealer's total exceeds 21.</li>
                             </ul>
                         </li>
                     </ol>
@@ -98,6 +110,10 @@ Okay, I've created a simple 21 game using HTML, CSS, and Javascript.
         let dealerCardIndex = 1; // Track the index of the next dealer card to reveal
 
         function startGame() {
+            hitButton.style.setProperty('display', 'block');
+            keepButton.style.setProperty('display', 'block');
+            messageElement.style.setProperty('display', 'none');
+
             deck = createDeck();
             shuffleDeck(deck);
             dealerCards = [];
@@ -109,7 +125,6 @@ Okay, I've created a simple 21 game using HTML, CSS, and Javascript.
             dealerCardsElement.innerHTML = '';
             playerCardsElement.innerHTML = '';
             playerTotalElement.innerText = `Your Total: ${playerTotal}`;
-            messageElement.innerText = "Press Hit (+) to draw or Keep (K) to stand.";
             dealerTotalElement.innerText = `Dealer Total: ${dealerTotal}`;
 
             // Initial deal: 2 cards to the player and dealer
@@ -170,16 +185,16 @@ Okay, I've created a simple 21 game using HTML, CSS, and Javascript.
         function updateView() {
             playerTotal = calculateTotal(playerCards);
             dealerTotal = calculateTotal(dealerCards);
-            playerCardsElement.innerHTML = playerCards.map(card => `<div class="card">${card.rank} ${card.suit}</div>`).join('');
+            playerCardsElement.innerHTML = playerCards.map(card => `<div class="card flex items-center">${card.rank} ${card.suit}</div>`).join('');
 
             // Show dealer cards progressively
-            let dealerCardsHtml = `<div class="card">${dealerCards[0].rank} ${dealerCards[0].suit}</div>`;
+            let dealerCardsHtml = `<div class="card flex items-center">${dealerCards[0].rank} ${dealerCards[0].suit}</div>`;
             for (let i = 1; i < dealerCards.length; i++) {
                 if (i < dealerCardIndex && gameOver) {
                     // Reveal cards up to the current index, but only after game over
-                    dealerCardsHtml += `<div class="card">${dealerCards[i].rank} ${dealerCards[i].suit}</div>`;
+                    dealerCardsHtml += `<div class="card flex items-center">${dealerCards[i].rank} ${dealerCards[i].suit}</div>`;
                 } else if (i < dealerCardIndex) {
-                    dealerCardsHtml += `<div class="card">${dealerCards[i].rank} ${dealerCards[i].suit}</div>`;
+                    dealerCardsHtml += `<div class="card flex items-center">${dealerCards[i].rank} ${dealerCards[i].suit}</div>`;
                 }
                 else {
                     dealerCardsHtml += `<div class="card hidden-card">?</div>`;
@@ -223,17 +238,20 @@ Okay, I've created a simple 21 game using HTML, CSS, and Javascript.
         }
 
         function determineWinner() {
+            hitButton.style.setProperty('display', 'none');
+            keepButton.style.setProperty('display', 'none');
+            messageElement.style.setProperty('display', 'block');
+
             let message = '';
-            if (playerTotal > 21) {
-                message = "You Busted! Dealer Wins!";
-            } else if (dealerTotal > 21) {
-                message = "Dealer Busted! You Win!";
-            } else if (playerTotal > dealerTotal) {
-                message = "You Win!";
-            } else if (dealerTotal > playerTotal) {
-                message = "Dealer Wins!";
+            if (playerTotal > 21 || (dealerTotal <=21 && dealerTotal > playerTotal)) {
+                message = "Dealer Wins! 😒";
+                messageElement.classList.replace('text-green-400', 'text-gray-600');
+            } else if (dealerTotal > 21 || (playerTotal <=21 && playerTotal > dealerTotal)) {
+                message = "Congratulations! You Win! 🎉";
+                messageElement.classList.add('text-gray-600', 'text-green-400');
             } else {
                 message = "It's a Tie!";
+                messageElement.classList.add('text-gray-600', 'text-green-400');
             }
             messageElement.innerText = message;
         }

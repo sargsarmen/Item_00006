@@ -1,4 +1,4 @@
-(function () {
+document.addEventListener("DOMContentLoaded", (event) => {
   const dealerCardsElement = document.getElementById("dealer-cards");
   const playerCardsElement = document.getElementById("player-cards");
   const messageElement = document.getElementById("message");
@@ -17,6 +17,10 @@
   let dealerCardIndex = 1; // Track the index of the next dealer card to reveal
 
   function startGame() {
+    hitButton.style.setProperty("display", "block");
+    keepButton.style.setProperty("display", "block");
+    messageElement.style.setProperty("display", "none");
+
     deck = createDeck();
     shuffleDeck(deck);
     dealerCards = [];
@@ -28,7 +32,6 @@
     dealerCardsElement.innerHTML = "";
     playerCardsElement.innerHTML = "";
     playerTotalElement.innerText = `Your Total: ${playerTotal}`;
-    messageElement.innerText = "Press Hit (+) to draw or Keep (K) to stand.";
     dealerTotalElement.innerText = `Dealer Total: ${dealerTotal}`;
 
     // Initial deal: 2 cards to the player and dealer
@@ -104,17 +107,20 @@
     playerTotal = calculateTotal(playerCards);
     dealerTotal = calculateTotal(dealerCards);
     playerCardsElement.innerHTML = playerCards
-      .map((card) => `<div class="card">${card.rank} ${card.suit}</div>`)
+      .map(
+        (card) =>
+          `<div class="card flex items-center">${card.rank} ${card.suit}</div>`
+      )
       .join("");
 
     // Show dealer cards progressively
-    let dealerCardsHtml = `<div class="card">${dealerCards[0].rank} ${dealerCards[0].suit}</div>`;
+    let dealerCardsHtml = `<div class="card flex items-center">${dealerCards[0].rank} ${dealerCards[0].suit}</div>`;
     for (let i = 1; i < dealerCards.length; i++) {
       if (i < dealerCardIndex && gameOver) {
         // Reveal cards up to the current index, but only after game over
-        dealerCardsHtml += `<div class="card">${dealerCards[i].rank} ${dealerCards[i].suit}</div>`;
+        dealerCardsHtml += `<div class="card flex items-center">${dealerCards[i].rank} ${dealerCards[i].suit}</div>`;
       } else if (i < dealerCardIndex) {
-        dealerCardsHtml += `<div class="card">${dealerCards[i].rank} ${dealerCards[i].suit}</div>`;
+        dealerCardsHtml += `<div class="card flex items-center">${dealerCards[i].rank} ${dealerCards[i].suit}</div>`;
       } else {
         dealerCardsHtml += `<div class="card hidden-card">?</div>`;
       }
@@ -159,17 +165,23 @@
   }
 
   function determineWinner() {
+    hitButton.style.setProperty("display", "none");
+    keepButton.style.setProperty("display", "none");
+    messageElement.style.setProperty("display", "block");
+
     let message = "";
-    if (playerTotal > 21) {
-      message = "You Busted! Dealer Wins!";
-    } else if (dealerTotal > 21) {
-      message = "Dealer Busted! You Win!";
-    } else if (playerTotal > dealerTotal) {
-      message = "You Win!";
-    } else if (dealerTotal > playerTotal) {
-      message = "Dealer Wins!";
+    if (playerTotal > 21 || (dealerTotal <= 21 && dealerTotal > playerTotal)) {
+      message = "Dealer Wins! 😒";
+      messageElement.classList.replace("text-green-400", "text-gray-600");
+    } else if (
+      dealerTotal > 21 ||
+      (playerTotal <= 21 && playerTotal > dealerTotal)
+    ) {
+      message = "Congratulations! You Win! 🎉";
+      messageElement.classList.add("text-gray-600", "text-green-400");
     } else {
       message = "It's a Tie!";
+      messageElement.classList.add("text-gray-600", "text-green-400");
     }
     messageElement.innerText = message;
   }
@@ -190,4 +202,4 @@
 
   // Start the game when the page loads
   startGame();
-})();
+});
