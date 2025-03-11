@@ -1,0 +1,15 @@
+.card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    min-width: 50px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.hidden-card {
+    background-color: #ccc;
+    color: #ccc;
+    box-sizing: border-box;
+}
