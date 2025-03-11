@@ -6,57 +6,6 @@
     <title>Simple 21 Game</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <style>
-        /* CSS styles adjusted to show dealer's total and for spacing */
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            background-color: #f0f0f0;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-
-        #title-container {
-            text-align: center;
-            padding: 10px;
-            margin-bottom: 0;
-            width: 800px;
-            max-width: 100%;
-            box-sizing: border-box;
-        }
-
-        #game-title {
-            font-size: 2rem;
-            font-weight: bold;
-            background: linear-gradient(to right, blue, purple);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        #game-container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 800px;
-            margin: 20px;
-            width: calc(100% - 40px);
-            box-sizing: border-box;
-        }
-
-        #player-cards, #dealer-cards {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-        }
-
         .card {
             border: 1px solid #ddd;
             padding: 10px;
@@ -72,97 +21,61 @@
             color: #ccc;
             box-sizing: border-box;
         }
-
-        #instructions-container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: left;
-            max-width: 800px;
-            margin: 20px;
-            width: calc(100% - 40px);
-            overflow: hidden;
-            transition: max-height 0.3s ease-in-out;
-            box-sizing: border-box;
-        }
-
-        #instructions-container.collapsed {
-            max-height: 50px;
-            box-sizing: border-box;
-        }
-
-        #instructions-container.expanded {
-            max-height: 500px;
-            box-sizing: border-box;
-        }
-
-        #instructions-toggle {
-            background-color: #f0f0f0;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            border-bottom: 1px solid #ddd;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #instructions-content {
-            padding: 10px;
-            box-sizing: border-box;
-            display: block;
-        }
     </style>
 </head>
-<body class="bg-gray-100">
-    <div id="title-container" class="bg-white rounded shadow-md p-6" style="margin-bottom: 20px;">
-        <h1 id="game-title">Simple 21 Game</h1>
-    </div>
-    <div id="game-container" class="bg-white rounded shadow-md p-6 text-center">
-        <div id="dealer-cards" class="flex justify-center gap-2 mb-4"></div>
-        <p id="dealer-total" class="mb-4 font-semibold">Dealer Total: 0</p>
-        <div id="player-cards" class="flex justify-center gap-2 mb-4"></div>
-        <p id="player-total" class="mb-4 font-semibold">Your Total: 0</p>
-        <div id="message" class="mb-4 font-medium">Welcome to Simple 21!</div>
-        <div id="controls" class="flex justify-center gap-4">
-            <button id="hit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Hit (+)</button>
-            <button id="keep" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Keep (K)</button>
-            <button id="new-game" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">New Game</button>
+<body class="min-h-screen pt-8 pb-8 bg-gradient-to-b from-blue-50 via-blue-100 to-blue-200">
+    <main class="flex flex-col items-center gap-8">
+        <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold drop-shadow-lg bg-gradient-to-r from-blue-700 to-purple-700 text-transparent bg-clip-text">
+            Simple 21
+        </h1>
+        <div class="w-sm md:w-md p-4 rounded-2xl shadow-xl border-2 border-blue-200 text-center">
+            <div id="dealer-cards" class="flex justify-center gap-2 mb-4"></div>
+            <p id="dealer-total" class="mb-4 font-semibold">Dealer Total: 0</p>
+            <div id="player-cards" class="flex justify-center gap-2 mb-4"></div>
+            <p id="player-total" class="mb-4 font-semibold">Your Total: 0</p>
+            <div id="message" class="mb-4 font-medium"></div>
+            <div id="controls" class="flex justify-center gap-4">
+                <button id="hit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Hit (+)</button>
+                <button id="keep" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Keep (K)</button>
+                <button id="new-game" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">New Game</button>
+            </div>
         </div>
-    </div>
-
-    <div id="instructions-container" class="collapsed">
-        <div id="instructions-toggle">
-            <span>Game Instructions</span>
+        <div class="w-sm md:w-md p-4 rounded-2xl shadow-xl border-2 border-blue-200 text-center">
+            <div class="py-5">
+                <details class="group">
+                    <summary class="flex cursor-pointer list-none items-center justify-between font-medium">
+                        <span>How to Play Simple 21</span>
+                        <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24">
+                                    <path d="M6 9l6 6 6-6"></path>
+                                </svg>
+                            </span>
+                    </summary>
+                    <ol class="text-left pt-4">
+                        <li><strong>Objective:</strong> Get as close to 21 without going over.</li>
+                        <li><strong>Controls:</strong>
+                            <ul>
+                                <li><strong>Hit (+):</strong> Draw another card.</li>
+                                <li><strong>Keep (K):</strong> Stop drawing cards.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Dealer's Play:</strong>
+                            <ul>
+                                <li>Dealer's first card is face up, the rest are hidden.</li>
+                                <li>Dealer draws until total is 17 or higher.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Winning:</strong>
+                            <ul>
+                                <li>Your total is higher than the dealer's.</li>
+                                <li>Dealer's total exceeds 21.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </details>
+            </div>
         </div>
-        <div id="instructions-content">
-            <h3>How to Play Simple 21</h3>
-            <ol>
-                <li><strong>Objective:</strong> Get as close to 21 without going over.</li>
-                <li><strong>Controls:</strong>
-                    <ul>
-                        <li><strong>Hit (+):</strong> Draw another card.</li>
-                        <li><strong>Keep (K):</strong> Stop drawing cards.</li>
-                    </ul>
-                </li>
-                <li><strong>Dealer's Play:</strong>
-                    <ul>
-                        <li>Dealer's first card is face up, the rest are hidden.</li>
-                        <li>Dealer draws until total is 17 or higher.</li>
-                    </ul>
-                </li>
-                <li><strong>Winning:</strong>
-                    <ul>
-                        <li>Your total is higher than the dealer's.</li>
-                        <li>Dealer's total exceeds 21.</li>
-                    </ul>
-                </li>
-            </ol>
-        </div>
-    </div>
-
+    </main>
     <script>
         const dealerCardsElement = document.getElementById('dealer-cards');
         const playerCardsElement = document.getElementById('player-cards');
@@ -172,18 +85,6 @@
         const newGameButton = document.getElementById('new-game');
         const playerTotalElement = document.getElementById('player-total');
         const dealerTotalElement = document.getElementById('dealer-total');
-        const instructionsContainer = document.getElementById('instructions-container');
-        const instructionsToggle = document.getElementById('instructions-toggle');
-
-        instructionsToggle.addEventListener('click', () => {
-            if (instructionsContainer.classList.contains('collapsed')) {
-                instructionsContainer.classList.remove('collapsed');
-                instructionsContainer.classList.add('expanded');
-            } else {
-                instructionsContainer.classList.remove('expanded');
-                instructionsContainer.classList.add('collapsed');
-            }
-        });
 
         let deck = [];
         let dealerCards = [];
@@ -205,7 +106,7 @@
             dealerCardsElement.innerHTML = '';
             playerCardsElement.innerHTML = '';
             playerTotalElement.innerText = `Your Total: ${playerTotal}`;
-            messageElement.innerText = "Welcome to Simple 21! Press Hit (+) to draw or Keep (K) to stand.";
+            messageElement.innerText = "Press Hit (+) to draw or Keep (K) to stand.";
             dealerTotalElement.innerText = `Dealer Total: ${dealerTotal}`;
 
             // Initial deal: 2 cards to the player and dealer
