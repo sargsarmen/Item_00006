@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple 21 Game</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
     <style>
         :root{
             --text-6xl--line-height: calc(4 / 3.75);
@@ -245,6 +246,11 @@
                 messageElement.classList.replace('text-green-400', 'text-gray-600');
             } else if (dealerTotal > 21 || (playerTotal <=21 && playerTotal > dealerTotal)) {
                 message = "Congratulations! You Win! 🎉";
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                });
                 messageElement.classList.add('text-gray-600', 'text-green-400');
             } else {
                 message = "It's a Tie!";
