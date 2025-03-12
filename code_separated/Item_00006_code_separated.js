@@ -178,6 +178,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
       (playerTotal <= 21 && playerTotal > dealerTotal)
     ) {
       message = "Congratulations! You Win! 🎉";
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
       messageElement.classList.add("text-gray-600", "text-green-400");
     } else {
       message = "It's a Tie!";
