@@ -12,6 +12,7 @@ Okay, I've created a simple 21 game using HTML, CSS, and Javascript.
     <style>
         :root{
             --text-6xl--line-height: calc(4 / 3.75);
+            --default-font-family: 'Inter', sans-serif;
         }
         .card {
             border: 1px solid #ddd;
